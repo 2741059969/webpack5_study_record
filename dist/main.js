@@ -1,1 +1,0 @@
-console.log("hello"),console.log([3,4,1,9].reduce(((o,l)=>o+l),0));

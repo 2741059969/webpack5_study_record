@@ -1,0 +1,56 @@
+@font-face {
+  /* 创造字体类型 */
+  font-family: "iconfont"; /* Project id 3961716 */
+  src: url('iconfont.woff2?t=1685154978582') format('woff2'),
+       url('iconfont.woff?t=1685154978582') format('woff'),
+       url('iconfont.ttf?t=1685154978582') format('truetype');
+}
+/* 字体样式类名 */
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-a-yuyueguanli3x:before {
+  content: "\e60e";
+}
+
+.icon-a-tuijian3x:before {
+  content: "\e60f";
+}
+
+.icon-a-chengbenguanli3x:before {
+  content: "\e614";
+}
+
+.icon-a-kehu3x:before {
+  content: "\e616";
+}
+
+.icon-a-gudingbaobiao3x:before {
+  content: "\e617";
+}
+
+.icon-gouwuchekong:before {
+  content: "\e600";
+}
+
+.icon-gouwuche:before {
+  content: "\e63a";
+}
+
+.icon-gouwuche1:before {
+  content: "\e607";
+}
+
+.icon-gouwuche2:before {
+  content: "\e634";
+}
+
+.icon-gouwuche3:before {
+  content: "\e772";
+}
+

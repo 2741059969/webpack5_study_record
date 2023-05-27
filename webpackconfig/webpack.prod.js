@@ -3,41 +3,79 @@ const path = require('path')
 const ESLintWebpackPlugin = require('eslint-webpack-plugin')
 //引入html插件自动生成html文件并引入js
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+//引入提取css为单独文件并通过link标签引入的插件
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+//引入压缩CSS的插件
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+// const TerserPlugin = require('terser-webpack-plugin')
+
+//提取公共部分为函数
+const getStyleLoaders = function (processor) {
+  return [
+    MiniCssExtractPlugin.loader,
+    'css-loader',
+    {
+      loader: 'postcss-loader',
+      //处理CSS兼容问题
+      options: {
+        postcssOptions: {
+          plugins: [
+            'postcss-preset-env' // 能解决大多数样式兼容性问题
+          ]
+        }
+      }
+    },
+    processor
+  ].filter((v) => v)
+}
 module.exports = {
   entry: './src/index.js',
   output: {
     //输出文件夹
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../dist'),
     //输出文件名，可在前面指定文件夹
     filename: 'static/js/main.js',
     //  filename:"test/hello.js",
     //每次生成输出文件时删除之前的所有文件
     clean: true
   },
-  //生产模式下这个配置没有用,开发模式下才有用且注意运行指令发生了变化，加上serve,不加serve则不会启动服务器，而是以开发模式打包生成
-  devServer: {
-    host: 'localhost', // 启动服务器域名
-    port: '3000', // 启动服务器端口号
-    open: true // 是否自动打开浏览器
-  },
-  // mode: 'production',
-  mode: 'development',
+  mode: 'production',
+  // devtool: 'source-map',
   plugins: [
     new ESLintWebpackPlugin({
-      context: path.resolve(__dirname, 'src')
+      context: path.resolve(__dirname, '../src')
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'public/index.html')
-    })
+      template: path.resolve(__dirname, '../public/index.html')
+    }),
+    //提取成单独文件
+    new MiniCssExtractPlugin({
+      // 定义输出CSS文件名和目录
+      filename: 'static/css/main.css'
+    }),
+    // css压缩
+    new CssMinimizerPlugin()
   ],
 
   module: {
     rules: [
       //配置css loader,处理css资源，使其支持模块化导入
-      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
-      { test: /\.less$/, use: ['style-loader', 'css-loader', 'less-loader'] },
-      { test: /\.s[ac]ss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
-      { test: /\.styl$/, use: ['style-loader', 'css-loader', 'stylus-loader'] },
+      {
+        test: /\.css$/,
+        use: getStyleLoaders()
+      },
+      {
+        test: /\.less$/,
+        use: getStyleLoaders('less-loader')
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: getStyleLoaders('sass-loader')
+      },
+      {
+        test: /\.styl$/,
+        use: getStyleLoaders('stylus-loader')
+      },
 
       //处理js文件，高级语法编译
       {
